@@ -1,4 +1,4 @@
-AC_INIT([libwebp], [1.2.0],
+AC_INIT([libwebp], [1.2.1],
         [https://bugs.chromium.org/p/webp],,
         [http://developers.google.com/speed/webp])
 AC_CANONICAL_HOST
@@ -258,6 +258,9 @@ AS_IF([test "x$enable_neon" != "xno"], [
       case "$host_os" in
         *android*) AC_CHECK_HEADERS([cpu-features.h]) ;;
       esac
+      ;;
+    aarch64*|arm64*)
+      AC_DEFINE(WEBP_HAVE_NEON, [1], [Set to 1 if NEON is supported])
       ;;
   esac
   AC_SUBST([NEON_FLAGS])])

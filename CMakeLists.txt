@@ -6,7 +6,7 @@
 #  in the file PATENTS.  All contributing project authors may
 #  be found in the AUTHORS file in the root of the source tree.
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.7)
 
 if(POLICY CMP0072)
   cmake_policy(SET CMP0072 NEW)
@@ -283,10 +283,12 @@ if(XCODE)
   libwebp_add_stub_file(webp)
 endif()
 target_link_libraries(webp ${WEBP_DEP_LIBRARIES})
-target_include_directories(webp
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                   ${CMAKE_CURRENT_BINARY_DIR}
-                           PUBLIC $<INSTALL_INTERFACE:include>)
+target_include_directories(
+  webp
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+          ${CMAKE_CURRENT_BINARY_DIR}
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+         $<INSTALL_INTERFACE:include>)
 set_target_properties(
   webp
   PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/src/webp/decode.h;\
@@ -578,7 +580,6 @@ if(WEBP_BUILD_EXTRAS)
   target_link_libraries(get_disto imagedec)
   target_include_directories(get_disto
                              PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                     ${CMAKE_CURRENT_SOURCE_DIR}/src
                                      ${CMAKE_CURRENT_BINARY_DIR}/src)
 
   # webp_quality
@@ -595,7 +596,6 @@ if(WEBP_BUILD_EXTRAS)
     target_link_libraries(vwebp_sdl ${SDL_LIBRARY} imageioutil webp)
     target_include_directories(vwebp_sdl
                                PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                       ${CMAKE_CURRENT_SOURCE_DIR}/src
                                        ${CMAKE_CURRENT_BINARY_DIR}
                                        ${CMAKE_CURRENT_BINARY_DIR}/src
                                        ${SDL_INCLUDE_DIR})
